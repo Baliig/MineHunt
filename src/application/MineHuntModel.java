@@ -101,12 +101,12 @@ public class MineHuntModel implements IMineHuntModel {
 				if (mineHunt[i][j].isMine()) {
 					countNeighborMine++;
 				}
-				if (j == CONSTANTE.NBR_COL - 1)
+				if (j == numberRow - 1)
 					break;
 				j++;
 			}
 			j = 0;
-			if (i == CONSTANTE.NBR_ROW - 1)
+			if (i == numberCol - 1)
 				break;
 			i++;
 		}
