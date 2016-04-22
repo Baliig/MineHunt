@@ -69,14 +69,14 @@ public class MineHunt extends Application {
 		gameButton.getChildren().add(newGame);
 		gameButton.setAlignment(Pos.CENTER);
 
+		// --- Game Button
+		root.getChildren().add(gameButton);
+
 		// --- Button Table List:
 		root.getChildren().add(grid);
 		grid.setHgap(CONSTANTE.NBR_COL);
 		grid.setVgap(CONSTANTE.NBR_ROW);
 		grid.setAlignment(Pos.CENTER);
-
-		// --- Game Button
-		root.getChildren().add(gameButton);
 
 	}
 
@@ -172,15 +172,12 @@ public class MineHunt extends Application {
 
 		if (mineGrid != null) {
 			mineGrid = null;
-			// root = new VBox();
-
 			root.getChildren().remove(grid);
 			grid = new GridPane();
 			root.getChildren().add(grid);
-			grid.setHgap(CONSTANTE.NBR_COL);
-			grid.setVgap(CONSTANTE.NBR_ROW);
+			grid.setHgap(col);
+			grid.setVgap(row);
 			grid.setAlignment(Pos.CENTER);
-			
 		}
 		mineGrid = new CellButton[row][col];
 		// Add grid and event to CellButton
@@ -249,19 +246,23 @@ public class MineHunt extends Application {
 
 				@Override
 				public void handle(ActionEvent event) {
-					int row = Integer.valueOf(textRow.getText());
-					int col = Integer.valueOf(textCol.getText());
-					int mine = Integer.valueOf(textMine.getText());
-					ctrl.newGame(row, col, mine);
-
-					/*
-					 * MineHunt mView = new MineHunt(); MineHuntModel mModel =
-					 * new MineHuntModel(); MineHuntController mCtrl = new
-					 * MineHuntController(mView, mModel); mModel.setCtrl(mCtrl);
-					 */
-					stage.close();
+					try {
+						int row = Integer.valueOf(textRow.getText());
+						int col = Integer.valueOf(textCol.getText());
+						int mine = Integer.valueOf(textMine.getText());
+						if (mine < row * col) {
+							ctrl.newGame(row, col, mine);
+							stage.close();
+						} else
+							throw new NumberFormatException();
+					} catch (NumberFormatException e) {
+						Alert dialog = new Alert(AlertType.WARNING);
+						dialog.setTitle("MineHunt - Wrong parameter");
+						dialog.setHeaderText("MineHunt");
+						dialog.setContentText("Caution !\n" + "Enter a correct number");
+						dialog.showAndWait();
+					}
 				}
-
 			});
 
 			cancel.setOnAction(new EventHandler<ActionEvent>() {
